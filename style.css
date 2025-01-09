@@ -1,0 +1,134 @@
+body {
+  background-color: black;
+  font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+  margin: 0; /* Remove default body margin */
+}
+
+.chat-container {
+  width: 100%;
+  height: 100vh; /* Make chat container take full viewport height */
+  margin: 0;
+  background-color: #181818;
+  display: flex;
+  flex-direction: column;
+}
+
+.gif-placeholder {
+  width: 100px;
+  height: 100px;
+  margin: 20px auto;
+  background-color: #333;
+  border-radius: 50%;
+}
+
+.chat-output {
+  flex-grow: 1;
+  padding: 20px;
+  overflow-y: auto; /* Use 'auto' instead of 'scroll' */
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+}
+
+.chat-output::-webkit-scrollbar {
+  display: none; /* Chrome, Safari and Opera */
+}
+
+/* Optional: Custom scrollbar for browsers that support it */
+.chat-output::-webkit-scrollbar {
+  width: 8px;
+}
+
+.chat-output::-webkit-scrollbar-track {
+  background: #282828;
+}
+
+.chat-output::-webkit-scrollbar-thumb {
+  background: #555;
+  border-radius: 4px;
+}
+
+.chat-input {
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  border-top: 1px solid #333;
+}
+
+#message-box {
+  flex-grow: 1;
+  padding: 10px;
+  margin-right: 10px;
+  border: none;
+  border-radius: 5px;
+  background-color: #282828;
+  color: white;
+  display: flex; /* Enable flexbox for alignment */
+  align-items: center; /* Align items vertically */
+}
+
+#char-count {
+  margin-left: auto; /* Push the counter to the right */
+  font-size: smaller; /* Make the counter text slightly smaller */
+  color: #888; /* Use a subtle color for the counter */
+}
+
+#send-button { 
+  padding: 10px; /* Adjust padding to accommodate the icon */
+  background-color: transparent;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  display: flex; /* Enable flexbox for positioning */
+  align-items: center; /* Center the icon vertically */
+  justify-content: center; /* Center the icon horizontally */
+}
+
+#send-button img {
+  width: 24px;
+  height: 24px;
+  background-color: transparent;
+  object-fit: contain;
+}
+
+.user-message,
+.bot-message {
+  display: flex;
+  margin-bottom: 15px;
+}
+
+.user-message {
+  justify-content: flex-end;
+}
+
+.message-text {
+  padding: 10px;
+  border-radius: 10px;
+  max-width: 70%;
+  word-wrap: break-word;
+}
+
+.user-message .message-text {
+  background-color: #007AFF;
+  color: white;
+}
+
+.bot-message .message-text {
+  background-color: #333;
+  color: white;
+}
+
+/* Responsive design for larger screens */
+@media (min-width: 768px) {
+  .chat-container {
+    width: 1000px;
+    max-width: 90%;
+    height: 90vh;
+    margin: 50px auto;
+    border-radius: 10px;
+  }
+
+  .gif-placeholder {
+    margin-top: 20px;
+  }
+}
