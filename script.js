@@ -2,6 +2,27 @@ const messageBox = document.getElementById('message-box');
 const sendButton = document.getElementById('send-button');
 const chatOutput = document.querySelector('.chat-output');
 
+
+// Function to generate thread ID (same logic as backend)
+function generateThreadId() {
+    const randomChars = Array(8).fill(0)
+        .map(() => 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
+        .charAt(Math.floor(Math.random() * 62))).join('');
+    const timestamp = new Date().toISOString()
+        .replace(/[-:]/g, '')
+        .replace('T', '')
+        .replace(/\..+/, '');
+    return `${randomChars}-${timestamp}`;
+}
+
+// Store thread ID in session storage
+let threadId = sessionStorage.getItem('threadId');
+if (!threadId) {
+    threadId = generateThreadId();
+    sessionStorage.setItem('threadId', threadId);
+}
+
+
 sendButton.addEventListener('click', sendMessage);
 
 function sendMessage() {
@@ -11,12 +32,15 @@ function sendMessage() {
         messageBox.value = '';
 
         // API call to backend
-        fetch('/api/chat', {
+        fetch('http://localhost:8080/api/chat', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({ message: message })
+            body: JSON.stringify({
+                message: message,
+                thread_id: threadId
+            })
         })
         .then(response => response.json())
         .then(data => {
