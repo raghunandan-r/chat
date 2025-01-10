@@ -129,6 +129,19 @@ body {
   }
 
   .gif-placeholder {
-    margin-top: 20px;
+    
+    border-radius: 50%;  /* Makes it circular */
+    width: 90px;       /* Fixed width */
+    height: 150px;      /* Same as width to make perfect circle */
+    overflow: hidden;   /* Ensures content stays within circle */
+    display: flex;      /* Centers the gif */
+    align-items: center;
+    justify-content: center;
+  }
+
+  .gif-placeholder img {
+    width: 100%;       /* Makes image fill the circle */
+    height: 100%;      /* Makes image fill the circle */
+    object-fit: cover; /* Maintains aspect ratio while filling */
   }
 }

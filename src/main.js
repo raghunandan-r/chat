@@ -1,7 +1,11 @@
+import './style.css';
 const messageBox = document.getElementById('message-box');
 const sendButton = document.getElementById('send-button');
 const chatOutput = document.querySelector('.chat-output');
 
+// Access environment variables
+const API_KEY = import.meta.env.VITE_API_KEY;
+const API_URL = import.meta.env.VITE_API_URL;
 
 // Function to generate thread ID (same logic as backend)
 function generateThreadId() {
@@ -65,10 +69,11 @@ function sendMessage() {
     messageBox.value = '';
 
     // API call to backend
-    fetch('http://localhost:8080/api/chat', {
+    fetch(`${API_URL}/api/chat`, {
         method: 'POST',
         headers: {
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
+            'X-API-KEY': API_KEY
         },
         body: JSON.stringify({
             message: sanitizedMessage,
@@ -76,6 +81,9 @@ function sendMessage() {
         })
     })
     .then(response => {
+        if (response.status === 401) {
+            throw new Error('Unauthorized');
+        }
         if (!response.ok) {
             throw new Error('Network response was not ok');
         }
@@ -86,7 +94,12 @@ function sendMessage() {
     })
     .catch(error => {
         console.error('Error:', error);
-        displayMessage('An error occurred. Please try again later.', 'bot');
+        displayMessage(
+            error.message === 'Unauthorized' 
+            ? 'Unauthorized' 
+            : 'An error occurred. Please try again later.', 
+        'bot'
+        );
     });
 }
 

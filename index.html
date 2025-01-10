@@ -1,25 +1,26 @@
 <!DOCTYPE html>
-<html>
-<head>
-  <title>ChatRaghu</title>
-  <link rel="stylesheet" href="style.css">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-</head>
-<body>
-  <div class="chat-container">
-    <div class="gif-placeholder">
-      <img src="assets/greek_glasses.gif" alt="jiff">
-    </div>
-    <div class="chat-output">
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ChatRaghu</title>
+  </head>
+  <body>
+    <div class="chat-container">
+      <div class="gif-placeholder">
+        <img src="assets/greek_glasses.gif" alt="jiff">
       </div>
-    <div class="chat-input">
-      <input type="text" id="message-box" placeholder="Inscribe your query, and Raghu may grant you an audience..." maxlength="100">
-      <span id="char-count">0/100</span>
-      <button id="send-button">
-        <img src="assets/paper-plane.png" alt="Send">
-      </button>
-    </div>
-  </div>
-  <script src="script.js"></script>
-</body>
+      <div class="chat-output"></div>
+    
+      <div class="chat-input">
+        <input type="text" id="message-box" placeholder="Inscribe your query, and Raghu may grant you an audience..." maxlength="100">
+        <span id="char-count">0/100</span>
+        <button id="send-button">
+          <img src="assets/paper-plane.png" alt="Send">
+        </button>
+      </div>
+      </div>
+
+    <script type="module" src="/src/main.js"></script>
+  </body>
 </html>
