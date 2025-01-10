@@ -27,30 +27,67 @@ sendButton.addEventListener('click', sendMessage);
 
 function sendMessage() {
     const message = messageBox.value;
-    if (message.trim() !== '') {
-        displayMessage(message, 'user');
-        messageBox.value = '';
-
-        // API call to backend
-        fetch('http://localhost:8080/api/chat', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                message: message,
-                thread_id: threadId
-            })
-        })
-        .then(response => response.json())
-        .then(data => {
-            displayMessage(data.response, 'bot');
-        })
-        .catch(error => {
-            console.error('Error:', error);
-            displayMessage('An error occurred.', 'bot');
-        });
+    
+    // Basic validations
+    if (!message || message.trim() === '') {
+        displayMessage('Message cannot be empty', 'system');
+        return;
     }
+
+    // Check for minimum length
+    if (message.trim().length < 2) {
+        displayMessage('Message too short', 'system');
+        return;
+    }
+
+    // Check for maximum length
+    if (message.length > 100) {
+        displayMessage('Message too long (max 100 characters)', 'system');
+        return;
+    }
+
+    // Check for special characters or potential XSS
+    const sanitizedMessage = message
+        .replace(/[<>]/g, '') // Remove potential HTML tags
+        .trim();
+
+    // Rate limiting (basic)
+    const lastMessageTime = sessionStorage.getItem('lastMessageTime');
+    const now = Date.now();
+    if (lastMessageTime && now - parseInt(lastMessageTime) < 1000) { // 1 second cooldown
+        displayMessage('Please wait before sending another message', 'system');
+        return;
+    }
+    sessionStorage.setItem('lastMessageTime', now.toString());
+
+    // Proceed with sending message
+    displayMessage(sanitizedMessage, 'user');
+    messageBox.value = '';
+
+    // API call to backend
+    fetch('http://localhost:8080/api/chat', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            message: sanitizedMessage,
+            thread_id: threadId
+        })
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        return response.json();
+    })
+    .then(data => {
+        displayMessage(data.response, 'bot');
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        displayMessage('An error occurred. Please try again later.', 'bot');
+    });
 }
 
 function displayMessage(message, sender) {
