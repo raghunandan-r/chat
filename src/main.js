@@ -7,15 +7,23 @@ const chatOutput = document.querySelector('.chat-output');
 const API_KEY = import.meta.env.VITE_API_KEY;
 const API_URL = import.meta.env.VITE_API_URL;
 
-// Function to generate thread ID (same logic as backend)
+// Function to generate thread ID using crypto-secure random values
 function generateThreadId() {
-    const randomChars = Array(8).fill(0)
-        .map(() => 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
-        .charAt(Math.floor(Math.random() * 62))).join('');
+    
+    const randomBytes = new Uint8Array(8);
+    crypto.getRandomValues(randomBytes);
+    
+    // Convert to base64 and clean up any URL-unsafe characters
+    const randomChars = btoa(String.fromCharCode(...randomBytes))
+        .replace(/[+/]/g, '') // Remove + and /
+        .substring(0, 8);     // Take first 8 chars
+    
+    // Add timestamp
     const timestamp = new Date().toISOString()
         .replace(/[-:]/g, '')
         .replace('T', '')
         .replace(/\..+/, '');
+    
     return `${randomChars}-${timestamp}`;
 }
 
@@ -75,6 +83,7 @@ function sendMessage() {
             'Content-Type': 'application/json',
             'X-API-KEY': API_KEY
         },
+        credentials: 'include', // Important for CORS with authentication
         body: JSON.stringify({
             message: sanitizedMessage,
             thread_id: threadId

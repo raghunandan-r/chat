@@ -131,8 +131,8 @@ body {
   .gif-placeholder {
     
     border-radius: 50%;  /* Makes it circular */
-    width: 90px;       /* Fixed width */
-    height: 150px;      /* Same as width to make perfect circle */
+    width: 100px;       /* Fixed width */
+    height: 100px;      /* Same as width to make perfect circle */
     overflow: hidden;   /* Ensures content stays within circle */
     display: flex;      /* Centers the gif */
     align-items: center;
