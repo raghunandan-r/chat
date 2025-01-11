@@ -37,71 +37,83 @@ if (!threadId) {
 
 sendButton.addEventListener('click', sendMessage);
 
-function sendMessage() {
-    const message = messageBox.value;
-    
-    // Basic validations
-    if (!message || message.trim() === '') {
-        displayMessage('Message cannot be empty', 'system');
-        return;
+const placeholderImg = document.querySelector('.gif-placeholder img');
+
+function setLoadingState(isLoading) {
+    if (isLoading) {
+        placeholderImg.src = placeholderImg.dataset.loading;
+    } else {
+        placeholderImg.src = placeholderImg.dataset.static;
     }
+}
 
-    // Check for minimum length
-    if (message.trim().length < 2) {
-        displayMessage('Message too short', 'system');
-        return;
-    }
+async function sendMessage() {
+    try {
+        setLoadingState(true);  // Show loading GIF
+        
+        const message = messageBox.value;
+        
+        // Basic validations
+        if (!message || message.trim() === '') {
+            displayMessage('Message cannot be empty', 'system');
+            return;
+        }
 
-    // Check for maximum length
-    if (message.length > 100) {
-        displayMessage('Message too long (max 100 characters)', 'system');
-        return;
-    }
+        // Check for minimum length
+        if (message.trim().length < 2) {
+            displayMessage('Message too short', 'system');
+            return;
+        }
 
-    // Check for special characters or potential XSS
-    const sanitizedMessage = message
-        .replace(/[<>]/g, '') // Remove potential HTML tags
-        .trim();
+        // Check for maximum length
+        if (message.length > 100) {
+            displayMessage('Message too long (max 100 characters)', 'system');
+            return;
+        }
 
-    // Rate limiting (basic)
-    const lastMessageTime = sessionStorage.getItem('lastMessageTime');
-    const now = Date.now();
-    if (lastMessageTime && now - parseInt(lastMessageTime) < 1000) { // 1 second cooldown
-        displayMessage('Please wait before sending another message', 'system');
-        return;
-    }
-    sessionStorage.setItem('lastMessageTime', now.toString());
+        // Check for special characters or potential XSS
+        const sanitizedMessage = message
+            .replace(/[<>]/g, '') // Remove potential HTML tags
+            .trim();
 
-    // Proceed with sending message
-    displayMessage(sanitizedMessage, 'user');
-    messageBox.value = '';
+        // Rate limiting (basic)
+        const lastMessageTime = sessionStorage.getItem('lastMessageTime');
+        const now = Date.now();
+        if (lastMessageTime && now - parseInt(lastMessageTime) < 1000) { // 1 second cooldown
+            displayMessage('Please wait before sending another message', 'system');
+            return;
+        }
+        sessionStorage.setItem('lastMessageTime', now.toString());
 
-    // API call to backend
-    fetch(`${API_URL}/api/chat`, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'X-API-KEY': API_KEY
-        },
-        credentials: 'include', // Important for CORS with authentication
-        body: JSON.stringify({
-            message: sanitizedMessage,
-            thread_id: threadId
-        })
-    })
-    .then(response => {
+        // Proceed with sending message
+        displayMessage(sanitizedMessage, 'user');
+        messageBox.value = '';
+
+        // API call to backend
+        const response = await fetch(`${API_URL}/api/chat`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-API-KEY': API_KEY
+            },
+            credentials: 'include', // Important for CORS with authentication
+            body: JSON.stringify({
+                message: sanitizedMessage,
+                thread_id: threadId
+            })
+        });
+        
         if (response.status === 401) {
             throw new Error('Unauthorized');
         }
         if (!response.ok) {
             throw new Error('Network response was not ok');
         }
-        return response.json();
-    })
-    .then(data => {
+        
+        // Process response
+        const data = await response.json();
         displayMessage(data.response, 'bot');
-    })
-    .catch(error => {
+    } catch (error) {
         console.error('Error:', error);
         displayMessage(
             error.message === 'Unauthorized' 
@@ -109,7 +121,10 @@ function sendMessage() {
             : 'An error occurred. Please try again later.', 
         'bot'
         );
-    });
+        
+    } finally {
+        setLoadingState(false);  // Return to static image
+    }
 }
 
 function displayMessage(message, sender) {

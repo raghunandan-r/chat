@@ -8,17 +8,18 @@
   <body>
     <div class="chat-container">
       <div class="gif-placeholder">
-        <img src="assets/greek_glasses.gif" alt="jiff">
+        <img src="/public/assets/greek_static.png" alt="jiff" data-static="/public/assets/greek_static.png" data-loading="/public/assets/greek_glasses.gif">
       </div>
       <div class="chat-output"></div>
     
       <div class="chat-input">
-        <input type="text" id="message-box" placeholder="Inscribe your query, and Raghu may grant you an audience..." maxlength="100">
-        <span id="char-count">0/100</span>
+        <div class="input-wrapper">
+          <input type="text" id="message-box" placeholder="Ask, and Raghu may grant you an audience..." maxlength="100">
+          <span id="char-count">0/100</span>
+        </div>
         <button id="send-button">
-          <img src="assets/paper-plane.png" alt="Send">
-        </button>
-      </div>
+          <img src="/public/assets/paper-plane.png" alt="Send">
+        </button>      
       </div>
 
     <script type="module" src="/src/main.js"></script>
