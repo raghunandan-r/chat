@@ -71,10 +71,19 @@ async function sendMessage() {
             return;
         }
 
-        // Check for special characters or potential XSS
+        // Sanitize message to prevent prompt hacking and XSS
         const sanitizedMessage = message
-            .replace(/[<>]/g, '') // Remove potential HTML tags
+            .replace(/[<>{}]/g, '') // Remove HTML tags and curly braces            
+            .replace(/\s+/g, ' ') // Normalize whitespace
             .trim();
+
+            //.replace(/(?:system|assistant|ai|prompt|instruction|\[.*?\]|\{.*?\}|\$.*?\$|`.*?`|\\[nrt])/gi, '') // Remove prompt hacking attempts
+
+        // Additional validation after sanitization
+        if (sanitizedMessage.length < 2) {
+            displayMessage('Invalid input message', 'system');
+            return;
+        }
 
         // Rate limiting (basic)
         const lastMessageTime = sessionStorage.getItem('lastMessageTime');
