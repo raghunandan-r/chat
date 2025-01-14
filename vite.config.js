@@ -9,5 +9,9 @@ export default defineConfig({
         changeOrigin: true
       }
     }
+  },
+  base: '/chat/',
+  build: {
+    output: 'dist'
   }
 }) 
