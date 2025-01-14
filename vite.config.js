@@ -12,6 +12,6 @@ export default defineConfig({
   },
   base: '/chat/',
   build: {
-    output: 'dist'
+    outDir: 'docs'
   }
 }) 
