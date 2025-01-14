@@ -16,8 +16,8 @@ node_modules
 !.env.example
 
 # Build output
-dist
-dist-ssr
+# dist
+# dist-ssr
 *.local
 
 # Editor directories
