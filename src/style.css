@@ -128,7 +128,7 @@ body {
 }
 
 .message-text {
-  padding: 10px;
+  padding: 10px 15px;
   border-radius: 30px;
   max-width: 70%;
   word-wrap: break-word;
@@ -137,11 +137,13 @@ body {
 .user-message .message-text {
   background-color: #007AFF;
   color: white;
+  padding: 10px 20px;
 }
 
 .bot-message .message-text {
   background-color: #333;
   color: white;
+  padding: 10px 20px;
 }
 
 /* Responsive design for larger screens */

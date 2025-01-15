@@ -9,10 +9,18 @@
     "build": "vite build",
     "preview": "vite preview",
     "predeploy": "npm run build",
-    "deploy": "gh-pages -d dist --dotfiles"    
+    "deploy": "gh-pages -d dist --dotfiles"
   },
   "devDependencies": {
     "gh-pages": "^6.3.0",
-    "vite": "^6.0.5"
-  }
+    "vite": "^6.0.7"
+  },
+  "description": "Frontend for my chat interface",
+  "main": "vite.config.js",
+  "directories": {
+    "doc": "docs"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
 }
