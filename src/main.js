@@ -4,8 +4,8 @@ const sendButton = document.getElementById('send-button');
 const chatOutput = document.querySelector('.chat-output');
 
 // Access environment variables
-const API_KEY = import.meta.env.VITE_API_KEY;
-const API_URL = import.meta.env.VITE_API_URL;
+// const API_KEY = import.meta.env.VITE_API_KEY;
+// const API_URL = import.meta.env.VITE_API_URL;
 
 // Function to generate thread ID using crypto-secure random values
 function generateThreadId() {
@@ -98,12 +98,14 @@ async function sendMessage() {
         displayMessage(sanitizedMessage, 'user');
         messageBox.value = '';
 
-        // API call to backend
-        const response = await fetch(`${API_URL}/api/chat`, {
+        // API call to backend development
+        // const response = await fetch(`${API_URL}/api/chat`, {
+        // API call to backend production
+        const response = await fetch(`https://satisfied-fulfillment-production.up.railway.app/api/chat`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'X-API-KEY': API_KEY
+                //'X-API-KEY': API_KEY
             },
             credentials: 'include', // Important for CORS with authentication
             body: JSON.stringify({
