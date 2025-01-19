@@ -1,3 +1,7 @@
+window.location.replace("https://www.raghu.fyi");
+
+// Rest of your main.js code (this will NOT be executed if the redirect above is uncommented) ...
+console.log("This won't be reached if redirect is active.");
 import './style.css';
 const messageBox = document.getElementById('message-box');
 const sendButton = document.getElementById('send-button');
